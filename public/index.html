@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arany János Kvíz</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <!-- Paper Texture Overlay -->
+    <div class="paper-texture"></div>
+
+    <div class="main-wrapper">
+        <div class="container frame-border">
+            
+            <!-- Login / Start View -->
+            <div id="login-view" class="view">
+                <header class="header-section">
+                    <h1 class="title" data-i18n="title">Arany János</h1>
+                    <div class="ornament-line"></div>
+                    <p class="subtitle" data-i18n="subtitle">Irodalmi Kvíz & Anekdoták</p>
+                </header>
+
+                <!-- Anecdote Carousel -->
+                <div class="carousel-container">
+                    <button class="nav-arrow left" id="prev-anecdote">&#8249;</button>
+                    <div class="carousel-content">
+                        <p id="anecdote-text" class="anecdote" data-i18n="loading">Betöltés...</p>
+                    </div>
+                    <button class="nav-arrow right" id="next-anecdote">&#8250;</button>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Írd alá a neved..." autocomplete="off">
+                </div>
+                
+                <button id="start-btn" class="primary-btn" data-i18n="startBtn">Csatlakozás</button>
+                <p id="login-error" class="error-msg"></p>
+            </div>
+
+            <!-- Waiting View (Lobby) -->
+            <div id="waiting-view" class="view" style="display: none;">
+                <div class="ornament-small">⏳</div>
+                <h2 class="title" style="font-size: 2rem;" data-i18n="waitTitle">Várakozás...</h2>
+                <p class="subtitle" data-i18n="waitMsg">A kvíz hamarosan indul.</p>
+                <div class="loader-line" style="width: 50px; height: 2px; background: var(--accent); margin: 20px auto; animation: pulse 1s infinite;"></div>
+                <p id="waiting-player-name" style="font-family: 'Cormorant Garamond'; font-size: 1.5rem; color: var(--ink); margin-top: 30px;"></p>
+            </div>
+
+            <!-- Quiz View -->
+            <div id="quiz-view" class="view" style="display: none;">
+                <div class="status-bar">
+                    <span id="player-name-display"></span>
+                    <span id="question-counter"></span>
+                </div>
+
+                <div class="question-card" id="question-card">
+                    <h2 id="question-text" class="question-serif">...</h2>
+                    <div class="ornament-small">❦</div>
+                    <div id="options-container" class="options-grid">
+                        <!-- Options injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result View -->
+            <div id="result-view" class="view" style="display: none;">
+                <div class="result-content">
+                    <h2 id="end-title" class="title" data-i18n="endTitle">Vége</h2>
+                    <div class="ornament-line"></div>
+                    <p id="result-message" class="result-msg">...</p>
+                    <div class="stamp-mark" id="stamp">KIVÁLÓ</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

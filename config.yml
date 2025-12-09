@@ -1,0 +1,62 @@
+# --- Application Settings ---
+settings:
+  # Ha true, megjelenít egy "Reset" gombot a felhasználói oldalon (cookie/localStorage törléshez)
+  client_reset_enabled: true
+  # Jelszó az admin dashboard funkcióihoz (Start, Stop, Reset, Kick)
+  dashboard_password: "admin"
+
+# --- Quiz Content ---
+questions:
+  - q: "Miért írta meg Arany A walesi bárdok című balladát?"
+    # Csak a HELYTELEN válaszokat sorold fel ide!
+    options: 
+      - "Szerette az angol történelmet."
+      - "Egy walesi utazás ihlette."
+    # Ez a HELYES válasz (a rendszer automatikusan hozzáadja a listához)
+    correct_option_text: "Ferenc József látogatására kérték fel, de elutasította."
+
+  - q: "Kb. hány egyedi szót használt Arany a műveiben?"
+    options: 
+      - "10.000"
+      - "30.000"
+    correct_option_text: "60.000"
+
+  - q: "Milyen hangszeren játszott Arany János?"
+    options: 
+      - "Hegedű"
+      - "Zongora"
+    correct_option_text: "Gitár"
+
+  # Extra kérdés példa (bármennyit hozzáadhatsz)
+  - q: "Melyik városban született Arany János?"
+    options:
+      - "Debrecen"
+      - "Budapest"
+    correct_option_text: "Nagyszalonta"
+
+# --- Anecdotes ---
+anecdotes:
+  - "„Gondolta a fene!” – mondta állítólag Arany, mikor egy verssorát túlmagyarázták az iskolában."
+  - "Arany János fejből tudta Homérosz műveit, eredeti ógörög nyelven."
+  - "Szerény ember volt: a „költő” megszólítást sosem szerette, inkább „tanár úrnak” hívatta magát."
+
+# --- UI Texts ---
+ui_texts:
+  title: "Arany János"
+  subtitle: "Irodalmi Kvíz & Anekdoták"
+  startBtn: "Csatlakozás"
+  endTitle: "Vége"
+  placeholder: "Írd alá a neved..."
+  errorName: "Kérlek, add meg a neved!"
+  loading: "Betöltés..."
+  sending: "Válaszok küldése..."
+  resultPrefix: "Eredményed:"
+  perfect: "KIVÁLÓ"
+  thanks: "Köszönjük a válaszokat,"
+  alreadyDone: "Már kitöltötted a kvízt."
+  submitError: "Hiba történt a beküldéskor. Az eredményt helyileg mentettük."
+  qCounter: "Kérdés"
+  waitTitle: "Várakozás..."
+  waitMsg: "A játékmester hamarosan indítja a kvízt."
+  joinError: "A kvíz már elindult, nem tudsz csatlakozni."
+  kickedError: "A játékmester eltávolított a játékból."

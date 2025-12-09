@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* BASE DASHBOARD STYLES */
+        body { 
+            overflow-y: auto; 
+            align-items: flex-start; 
+            padding-top: 50px; 
+            height: auto; 
+            min-height: 100vh;
+        }
+        .dashboard-container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            width: 100%; 
+            background: rgba(253, 251, 247, 0.95);
+            padding: 40px;
+            border: 1px solid var(--ink);
+            box-shadow: 0 10px 30px rgba(44, 36, 27, 0.1);
+            position: relative;
+            /* Hide by default until JS authenticates */
+            display: none; 
+        }
+        .dashboard-container::before { content: ''; position: absolute; top: 8px; left: 8px; width: 20px; height: 20px; border-top: 2px solid var(--ink); border-left: 2px solid var(--ink); }
+        .dashboard-container::after { content: ''; position: absolute; bottom: 8px; right: 8px; width: 20px; height: 20px; border-bottom: 2px solid var(--ink); border-right: 2px solid var(--ink); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        th { 
+            text-align: left; 
+            padding: 15px; 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 1.4rem; 
+            border-bottom: 2px solid var(--ink);
+            color: var(--ink);
+        }
+        td { 
+            padding: 15px; 
+            border-bottom: 1px solid rgba(44, 36, 27, 0.1); 
+            font-size: 1.1rem;
+            color: var(--ink-light);
+        }
+        tr:last-child td { border-bottom: none; }
+        
+        .score-perfect { color: var(--success); font-weight: bold; }
+        
+        .stats { display: flex; gap: 30px; margin-bottom: 40px; }
+        .stat-card { 
+            flex: 1; 
+            border: 1px solid var(--ink-light); 
+            padding: 20px; 
+            text-align: center;
+            background: #fff;
+        }
+        .stat-val { font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--accent); line-height: 1; }
+        .stat-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-top: 10px; }
+
+        .refresh-btn { margin: 0; min-width: 120px; text-align: center; }
+        
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .qr-link-btn {
+            background: transparent;
+            border: 1px solid var(--ink);
+            color: var(--ink);
+            padding: 12px 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            text-transform: uppercase;
+            min-width: 120px;
+            text-align: center;
+        }
+        .qr-link-btn:hover { background: var(--ink); color: white; }
+
+        .control-panel {
+            margin-bottom: 30px; 
+            padding: 25px; 
+            border: 1px solid var(--ink); 
+            background: #fff;
+            box-shadow: 5px 5px 0 rgba(44, 36, 27, 0.1);
+        }
+
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .user-list-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--ink-light);
+        }
+
+        .user-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .user-chip {
+            background: var(--paper);
+            border: 1px solid var(--ink-light);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--ink);
+            animation: fadeIn 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kick-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: 0.2s;
+        }
+        .kick-btn:hover { opacity: 1; transform: scale(1.2); }
+
+        /* PODIUM STYLES */
+        #podium-view {
+            display: none;
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            height: 400px;
+            margin-bottom: 50px;
+        }
+        
+        .podium-place {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0; 
+            transform: translateY(50px);
+        }
+        
+        .podium-box {
+            width: 100%;
+            border: 2px solid var(--ink);
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+        }
+        
+        /* Heights */
+        .place-1 .podium-box { height: 250px; border-color: #d4af37; background: rgba(212, 175, 55, 0.1); }
+        .place-2 .podium-box { height: 180px; border-color: #a9a9a9; background: rgba(169, 169, 169, 0.1); }
+        .place-3 .podium-box { height: 140px; border-color: #cd7f32; background: rgba(205, 127, 50, 0.1); }
+        
+        .medal-icon { font-size: 3rem; margin-bottom: 10px; }
+        .winner-name { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: bold; margin-bottom: 5px; color: var(--ink); }
+        .winner-score { font-family: 'Lato', sans-serif; font-size: 1.2rem; color: var(--ink-light); }
+        
+        .place-1 .winner-name { font-size: 2.5rem; color: #d4af37; text-shadow: 1px 1px 0 var(--ink); }
+        
+        /* Order for visual hierarchy: 2 - 1 - 3 */
+        .place-2 { order: 1; }
+        .place-1 { order: 2; z-index: 10; transform: scale(1.1) translateY(50px); } 
+        .place-3 { order: 3; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Login Overlay */
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 36, 27, 0.95);
+            z-index: 10000;
+            display: flex; /* Always visible */
+            justify-content: center;
+            align-items: center;
+        }
+        .login-box {
+            background: var(--paper);
+            padding: 40px;
+            border: 2px solid var(--gold);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+        .login-input {
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            border: 1px solid var(--ink);
+            background: rgba(255,255,255,0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Overlay -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2 class="title" style="font-size: 2rem;">Admin Belépés</h2>
+            <p>Add meg a jelszót a dashboard eléréséhez.</p>
+            <input type="password" id="admin-pass" class="login-input" placeholder="Jelszó">
+            <button id="login-btn" class="primary-btn">Belépés</button>
+            <p id="auth-error" style="color: var(--accent); margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <!-- Dashboard Content - Hidden by default, only shown after auth -->
+    <div id="dashboard-content" class="dashboard-container">
+        
+        <div class="header-controls">
+            <h1 class="title" style="margin:0;">Eredmények</h1>
+            <div style="display: flex; gap: 10px;">
+                <a href="qr.html" target="_blank" class="qr-link-btn">QR Kód</a>
+                <button id="refresh-btn" class="primary-btn refresh-btn">Frissítés</button>
+            </div>
+        </div>
+
+        <div class="ornament-line" style="margin: 0 0 30px 0; width: 100px;"></div>
+
+        <!-- Control Panel -->
+        <div class="control-panel" id="main-control-panel">
+            <h3 style="font-family: 'Cormorant Garamond'; font-size: 1.5rem; margin-bottom: 10px;">Vezérlőpult</h3>
+            
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Státusz:</span>
+                <span id="quiz-status-badge" style="background: var(--ink-light); color: white; padding: 5px 12px; border-radius: 4px; font-size: 0.9rem; text-transform: uppercase; font-weight: bold;">Betöltés...</span>
+            </div>
+
+            <div class="actions-row" style="margin-bottom: 20px;">
+                <button id="start-stop-btn" class="primary-btn" style="background: var(--success); color: white; border-color: var(--success); min-width: 200px;">
+                    Kvíz Indítása
+                </button>
+                <button id="confetti-btn" class="primary-btn" style="border-color: var(--gold); color: var(--ink-light); padding: 10px 20px; font-size: 1rem;">
+                    Konfetti
+                </button>
+                 <button id="reset-btn" class="primary-btn" style="background: transparent; border-color: var(--ink-light); color: var(--ink-light); font-size: 0.9rem;">
+                    Új Kör
+                </button>
+            </div>
+
+            <!-- Waiting Users List -->
+            <div class="user-list-container">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                    <span style="font-weight: bold; color: var(--accent);">Várakozó Játékosok (<span id="waiting-count">0</span>):</span>
+                </div>
+                <div id="waiting-users-list" class="user-chips">
+                    <span style="font-style: italic; opacity: 0.6;">Még senki nem csatlakozott...</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live Stats & Table (Hidden on Podium) -->
+        <div id="live-view">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-val" id="total-fills">0</div>
+                    <div class="stat-label">Kitöltés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="perfect-fills">0</div>
+                    <div class="stat-label">Telitalálat</div>
+                </div>
+            </div>
+
+            <table id="results-table">
+                <thead>
+                    <tr>
+                        <th>Név</th>
+                        <th>Eredmény</th>
+                        <th>Időpont</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows injected here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PODIUM VIEW -->
+        <div id="podium-view">
+            <h2 class="title" style="font-size: 2.5rem; margin-bottom: 30px;">Dobogósok</h2>
+            <div class="podium-container" id="podium-container">
+                <!-- Injected via JS -->
+            </div>
+            <button id="back-to-list-btn" class="primary-btn" style="margin-top: 30px;">Vissza a listához</button>
+        </div>
+
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>

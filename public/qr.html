@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Kód Generátor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Lato:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        #qrcode {
+            padding: 20px;
+            background: white;
+            border: 2px solid var(--ink);
+            box-shadow: 10px 10px 0 rgba(44, 36, 27, 0.2);
+        }
+        #qrcode img {
+            display: block; /* Fix spacing */
+        }
+        .url-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            border: 2px solid var(--ink);
+            background: rgba(255,255,255,0.8);
+            font-family: 'Lato', sans-serif;
+            font-size: 1.1rem;
+            color: var(--ink);
+            text-align: center;
+        }
+        .generate-btn {
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            padding: 15px 40px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .generate-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container" style="min-height: auto; padding-bottom: 50px;">
+            <h1 class="title">QR Kód</h1>
+            <p class="subtitle">Szkenneld be a csatlakozáshoz</p>
+            <div class="ornament-line"></div>
+
+            <div class="qr-container">
+                <input type="text" id="url-input" class="url-input" placeholder="Illeszd be az ngrok linket ide..." autocomplete="off">
+                
+                <button id="generate-btn" class="generate-btn">Generálás</button>
+
+                <div id="qrcode"></div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <a href="dashboard.html" style="color: var(--ink-light); text-decoration: none; border-bottom: 1px dashed var(--ink-light);">Vissza a Dashboardra</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('url-input');
+        const btn = document.getElementById('generate-btn');
+        const qrContainer = document.getElementById('qrcode');
+        let qrcode = null;
+
+        // Try to load saved URL from localStorage
+        const savedUrl = localStorage.getItem('arany_quiz_url');
+        if (savedUrl) input.value = savedUrl;
+
+        btn.addEventListener('click', () => {
+            const url = input.value.trim();
+            if (!url) return;
+
+            localStorage.setItem('arany_quiz_url', url);
+            qrContainer.innerHTML = ''; // Clear previous
+
+            qrcode = new QRCode(qrContainer, {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark : "#2c241b", // Ink color
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        
+        // Auto-generate if saved
+        if (input.value) btn.click();
+    </script>
+</body>
+</html>

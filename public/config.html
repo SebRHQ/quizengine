@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Using a cleaner, more admin-like font/style here, distinct from the vintage app */
+        :root { --primary: #3b82f6; --bg: #f3f4f6; --text: #1f2937; --card: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+        
+        /* Login Overlay */
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; justify-content: center; align-items: center; }
+        .login-box { background: white; padding: 30px; border-radius: 8px; width: 300px; text-align: center; }
+        .login-input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        /* Main Layout */
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; display: none; } /* Hidden by default */
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-danger { background: #ef4444; color: white; margin-left: 10px; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; }
+        .tab { padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: #6b7280; }
+        .tab.active { border-color: var(--primary); color: var(--primary); font-weight: bold; }
+        
+        /* Panels */
+        .panel { display: none; background: var(--card); padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .panel.active { display: block; }
+        
+        /* Forms */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; }
+        textarea { resize: vertical; min-height: 80px; }
+        
+        /* Question Items */
+        .q-item { border: 1px solid #e5e7eb; padding: 20px; margin-bottom: 20px; border-radius: 8px; background: #f9fafb; position: relative; }
+        .remove-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1.2rem; }
+        
+        .options-list input { margin-bottom: 5px; }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>Admin Belépés</h2>
+            <input type="password" id="admin-pass" class="login-input" placeholder="Jelszó">
+            <button id="login-btn" class="btn btn-primary">Belépés</button>
+            <p id="auth-error" style="color: red; margin-top: 10px; font-size: 0.9rem;"></p>
+        </div>
+    </div>
+
+    <div class="container" id="main-content">
+        <div class="header">
+            <h1>⚙️ Konfiguráció Szerkesztő</h1>
+            <div>
+                <a href="dashboard.html" style="text-decoration:none; margin-right: 15px; color: #6b7280;">Vissza a Dashboardra</a>
+                <button id="save-btn" class="btn btn-primary">💾 Mentés</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-target="panel-questions">Kérdések</div>
+            <div class="tab" data-target="panel-anecdotes">Anekdoták</div>
+            <div class="tab" data-target="panel-settings">Beállítások</div>
+            <div class="tab" data-target="panel-texts">UI Szövegek</div>
+        </div>
+
+        <!-- QUESTIONS PANEL -->
+        <div id="panel-questions" class="panel active">
+            <div id="questions-list"></div>
+            <button id="add-q-btn" class="btn btn-primary" style="width:100%; margin-top: 10px;">+ Új Kérdés</button>
+        </div>
+
+        <!-- ANECDOTES PANEL -->
+        <div id="panel-anecdotes" class="panel">
+            <p style="margin-bottom: 15px; color: #666;">Minden sort egy új anekdotának tekintünk.</p>
+            <textarea id="anecdotes-input" style="height: 300px;"></textarea>
+        </div>
+
+        <!-- SETTINGS PANEL -->
+        <div id="panel-settings" class="panel">
+            <div class="form-group">
+                <label>Dashboard Jelszó</label>
+                <input type="text" id="setting-password">
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="setting-reset"> 
+                    Kliens oldali Reset gomb engedélyezése (Teszteléshez)
+                </label>
+            </div>
+            <div class="form-group">
+                <label>Téma (Theme)</label>
+                <select id="setting-theme" class="login-input" disabled>
+                    <option value="classic">Klasszikus / Vintage (Jelenlegi)</option>
+                    <option value="modern">Modern (Hamarosan)</option>
+                </select>
+                <small style="color:orange">Csak a klasszikus téma elérhető jelenleg.</small>
+            </div>
+        </div>
+
+        <!-- UI TEXTS PANEL -->
+        <div id="panel-texts" class="panel">
+            <div id="texts-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <script src="config.js"></script>
+</body>
+</html>

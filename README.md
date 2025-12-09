@@ -18,8 +18,8 @@ Előfeltétel: [Node.js](https://nodejs.org/) telepítése.
 
 1.  **Klónozd le a repót:**
     ```bash
-    git clone https://github.com/FELHASZNALONEV/REPO_NEVE.git
-    cd REPO_NEVE
+    git clone https://github.com/SebRHQ/quizengine.git
+    cd quizengine
     ```
 
 2.  **Telepítsd a függőségeket:**

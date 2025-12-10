@@ -1,6 +1,6 @@
 {
-  "name": "asd",
-  "version": "1.0.0",
+  "name": "QuizEngine",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {

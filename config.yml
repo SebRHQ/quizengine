@@ -1,6 +1,6 @@
 settings:
   client_reset_enabled: false
-  client_reset_enabled: true
+  dashboard_password: "admin"
 questions:
   - q: >-
       Kinek a látogatása alkalmából kérték fel ünnepi vers írására, amit ő
@@ -58,7 +58,6 @@ anecdotes:
   - >-
     Szerény ember volt: a „költő” megszólítást sosem szerette, inkább „tanár
     úrnak” hívatta magát.
-  - szex
 ui_texts:
   title: Arany János - Totó
   subtitle: Irodalmi Kvíz & Anekdoták

@@ -99,7 +99,7 @@ loadConfig();
 // --- Auth Middleware ---
 const checkAuth = (req, res, next) => {
     const expectedToken = adminSessionToken; // Get current active token
-    if (!expectedToken) return res.status(401).json({ error: 'Unauthorized: Admin session not started' });
+    if (!expectedToken) {console.log("Unauthorized: Admin session not started"); return res.status(401).json({ error: 'Unauthorized: Admin session not started' })};
 
     const clientToken = req.headers['x-admin-token'];
     if (clientToken === expectedToken) {

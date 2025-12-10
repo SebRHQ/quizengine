@@ -1,62 +1,80 @@
-# --- Application Settings ---
 settings:
-  # Ha true, megjelenít egy "Reset" gombot a felhasználói oldalon (cookie/localStorage törléshez)
+  client_reset_enabled: false
   client_reset_enabled: true
-  # Jelszó az admin dashboard funkcióihoz (Start, Stop, Reset, Kick)
-  dashboard_password: "admin"
-
-# --- Quiz Content ---
 questions:
-  - q: "Miért írta meg Arany A walesi bárdok című balladát?"
-    # Csak a HELYTELEN válaszokat sorold fel ide!
-    options: 
-      - "Szerette az angol történelmet."
-      - "Egy walesi utazás ihlette."
-    # Ez a HELYES válasz (a rendszer automatikusan hozzáadja a listához)
-    correct_option_text: "Ferenc József látogatására kérték fel, de elutasította."
-
-  - q: "Kb. hány egyedi szót használt Arany a műveiben?"
-    options: 
-      - "10.000"
-      - "30.000"
-    correct_option_text: "60.000"
-
-  - q: "Milyen hangszeren játszott Arany János?"
-    options: 
-      - "Hegedű"
-      - "Zongora"
-    correct_option_text: "Gitár"
-
-  # Extra kérdés példa (bármennyit hozzáadhatsz)
-  - q: "Melyik városban született Arany János?"
+  - q: >-
+      Kinek a látogatása alkalmából kérték fel ünnepi vers írására, amit ő
+      visszautasított (és helyette megírta A walesi bárdok-at)?
     options:
-      - "Debrecen"
-      - "Budapest"
-    correct_option_text: "Nagyszalonta"
-
-# --- Anecdotes ---
+      - Kossuth Lajos.
+      - Erzsébet királyné (Sisi).
+    correct_option_text: Ferenc József császár.
+  - q: Kb. hány egyedi szót használt Arany a műveiben?
+    options:
+      - '10.000'
+      - '30.000'
+    correct_option_text: '60.000'
+  - q: Milyen hangszeren játszott Arany János?
+    options:
+      - Hegedű
+      - Zongora
+    correct_option_text: Gitár
+  - q: Melyik városban született Arany János?
+    options:
+      - Debrecen
+      - Nagykőrös
+    correct_option_text: Nagyszalonta
+  - q: >-
+      Melyik művével nyerte meg a Kisfaludy Társaság pályázatát 1846-ban, ami
+      meghozta neki a hírnevet?
+    options:
+      - Toldi Gábor estéje
+      - János vitéz
+    correct_option_text: Toldi
+  - q: Mi volt Arany János polgári foglalkozása a szabadságharc után Nagykőrösön?
+    options:
+      - Könyvtáros
+      - Ügyvéd
+    correct_option_text: Gimnáziumi tanár
+  - q: >-
+      Mi a címe annak a híres balladának, amelyben egy asszony folyamatosan egy
+      véres lepedőt mos?
+    options:
+      - V. László
+      - Tetemre hívás
+    correct_option_text: Ágnes asszony
+  - q: >-
+      Milyen különleges füzetbe írta az öregkori verseit (az Őszikéket) a
+      Margitszigeten?
+    options:
+      - Fekete füzet
+      - Bőrkötéses napló
+    correct_option_text: Kapcsos könyv
 anecdotes:
-  - "„Gondolta a fene!” – mondta állítólag Arany, mikor egy verssorát túlmagyarázták az iskolában."
-  - "Arany János fejből tudta Homérosz műveit, eredeti ógörög nyelven."
-  - "Szerény ember volt: a „költő” megszólítást sosem szerette, inkább „tanár úrnak” hívatta magát."
-
-# --- UI Texts ---
+  - >-
+    „Gondolta a fene!” – mondta állítólag Arany, mikor egy verssorát
+    túlmagyarázták az iskolában.
+  - Arany János fejből tudta Homérosz műveit, eredeti ógörög nyelven.
+  - >-
+    Szerény ember volt: a „költő” megszólítást sosem szerette, inkább „tanár
+    úrnak” hívatta magát.
+  - szex
 ui_texts:
-  title: "Arany János"
-  subtitle: "Irodalmi Kvíz & Anekdoták"
-  startBtn: "Csatlakozás"
-  endTitle: "Vége"
-  placeholder: "Írd alá a neved..."
-  errorName: "Kérlek, add meg a neved!"
-  loading: "Betöltés..."
-  sending: "Válaszok küldése..."
-  resultPrefix: "Eredményed:"
-  perfect: "KIVÁLÓ"
-  thanks: "Köszönjük a válaszokat,"
-  alreadyDone: "Már kitöltötted a kvízt."
-  submitError: "Hiba történt a beküldéskor. Az eredményt helyileg mentettük."
-  qCounter: "Kérdés"
-  waitTitle: "Várakozás..."
-  waitMsg: "A játékmester hamarosan indítja a kvízt."
-  joinError: "A kvíz már elindult, nem tudsz csatlakozni."
-  kickedError: "A játékmester eltávolított a játékból."
+  title: Arany János - Totó
+  subtitle: Irodalmi Kvíz & Anekdoták
+  startBtn: Csatlakozás
+  endTitle: Vége
+  placeholder: Írd alá a neved...
+  errorName: Kérlek, add meg a neved!
+  loading: Betöltés...
+  sending: Válaszok küldése...
+  resultPrefix: 'Eredményed:'
+  perfect: KIVÁLÓ
+  thanks: Köszönjük a válaszokat,
+  alreadyDone: Már kitöltötted a kvízt.
+  submitError: Hiba történt a beküldéskor. Az eredményt helyileg mentettük.
+  qCounter: Kérdés
+  waitTitle: Várakozás...
+  waitMsg: A játékmester hamarosan indítja a kvízt.
+  joinError: A kvíz már elindult, nem tudsz csatlakozni.
+  kickedError: A játékmester eltávolított a játékból.
